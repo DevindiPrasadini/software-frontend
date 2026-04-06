@@ -11,7 +11,7 @@ import { Route, Routes } from 'react-router-dom'
 function App(){
   return(
     <>
-      <div className='w-full h-screen border-[6px] flex justify-center item relative'>
+      <div className='w-full h-screen  flex justify-center item relative bg-primary text-secondary'>
       <Routes>
         <Route path='/' element={<HomePage />}/>
         <Route path='/admin' element={<AdminPage/>}/>

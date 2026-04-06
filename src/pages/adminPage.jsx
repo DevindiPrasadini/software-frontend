@@ -1,8 +1,12 @@
 export default function AdminPage(){
     return(
-        <div className="w-full h-screen border-[6px] flex justify-center items-center">
-            <h1 className="text-4xl font-bold">Welcome to Admin Page</h1>
+        <div className="w-full h-screen   flex   items-center bg-accent">
+            <div className="w-[300px] h-full ">
 
+            </div>
+            <div className="w-[calc(100%-300px)] h-full border-[10px] border-accent rounded-2xl bg-primary">
+
+            </div>
         </div>
     )
 }
