@@ -1,7 +1,21 @@
-import { useState } from "react"
+/*import { useState } from "react"*/
+
+import { FaRegUserCircle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export default function TestPage(){
-   const [emotion,setEmotion] = useState("😀")
+   return(
+      <div className="w-full h-screen text-4xl flex flex-col justify-center items-center bg-primary text-secondary">
+        <FaRegUserCircle className="text-blue-600" />
+        <FcGoogle />
+         
+      </div>
+   )
+  
+}
+
+
+ /*const [emotion,setEmotion] = useState("😀")
         
 
     return(
@@ -28,5 +42,4 @@ export default function TestPage(){
                 }className="bg-accent w-[70px] h-[30px] text-white border border-primary">Angry</button>
            </div>
         </div>
-    )
-}
+    )*/
