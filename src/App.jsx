@@ -8,12 +8,14 @@ import AdminPage from './pages/adminPage'
 import TestPage from './pages/test'
 import { Route, Routes } from 'react-router-dom'
 import LoginPage from './pages/loginPage'
+import { Toaster } from 'react-hot-toast'
 
 
 function App(){
   return(
     <>
       <div className='w-full h-screen  flex justify-center item relative bg-primary text-secondary'>
+      <Toaster position='top-right'/>
       <Routes>
         <Route path='/' element={<HomePage />}/>
         <Route path='/admin/*' element={<AdminPage/>}/>
