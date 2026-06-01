@@ -19,11 +19,11 @@ export default function AdminPage(){
             <div className="w-[calc(100%-300px)] h-full border-[10px] border-accent rounded-2xl bg-primary">
                 <Routes>
                     <Route path="/" element={<h1>Orders Dashboard</h1>}/>
-                    <Route path="/products" element={<AdminProductPage />}/>
-                    <Route path="/add-product" element={<AdminAddProductPage />}/>
-                    <Route path="/edit-products" element={<AdminEditProductPage />}/>
-                    <Route path="/users" element={<h1>Users Dashboard</h1>}/>
-                    <Route path="/reviews" element={<h1>Reviews Dashboard</h1>}/>
+                    <Route path="products" element={<AdminProductPage />}/>
+                    <Route path="add-product" element={<AdminAddProductPage />}/>
+                    <Route path="edit-products" element={<AdminEditProductPage />}/>
+                    <Route path="users" element={<h1>Users Dashboard</h1>}/>
+                    <Route path="reviews" element={<h1>Reviews Dashboard</h1>}/>
                 </Routes>
             </div>
         </div>

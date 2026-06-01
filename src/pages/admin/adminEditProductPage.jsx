@@ -20,7 +20,8 @@ export default function AdminEditProductPage() {
     const [model, setModel] = useState(location.state?.model || "");
     const [category, setCategory] = useState(location.state?.category || ""); // Initialized with first option
     const [isAvailable, setIsAvailable] = useState(location.state?.isAvailable || "");
-    const [stock, setStock] = useState(location.state?.stock || "");
+    const [stock, setStock] = useState(location.state?.stock || 0);
+    const [isUpdating , setIsUpdating] = useState(false)
     
     const navigate = useNavigate();
 
@@ -37,57 +38,73 @@ export default function AdminEditProductPage() {
     if (location.state == null){
         return <Navigate to="/admin/products" />
     }
-    async function handleSave() {
-        // try {
-        //     const token = localStorage.getItem("token");
-        //     if (token == null) {
-        //         toast.error("You must be logged in to perform this action");
-        //         window.location.href = "/login";
-        //         return;
-        //     }
+    async function handleUpdate() {
+        try {
+            setIsUpdating(true)
+            const token = localStorage.getItem("token");
+            //console.log("token: ",token)
+            if (token == null) {
+                toast.error("You must be logged in to perform this action");
+                window.location.href = "/login";
+               
+                return;
+            }
 
-        //     // Upload images concurrently
-        //     const mediaUploadPromises = [];
-        //     for (let i = 0; i < images.length; i++) {
-        //         mediaUploadPromises.push(uploadMedia(images[i]));
-        //     }
-        //     const urls = await Promise.all(mediaUploadPromises);
+            // Upload images concurrently
+            // const mediaUploadPromises = [];
+            // for (let i = 0; i < images.length; i++) {
+            //     mediaUploadPromises.push(uploadMedia(images[i]));
+            // }
+            // const urls = await Promise.all(mediaUploadPromises);
+            const imageArray = Array.from(images); 
+        console.log("imageArray:", imageArray); // 👈 add this
+        
+        const urls = await Promise.all(imageArray.map(img => uploadMedia(img)));
+        console.log("urls:", urls)
+            // Clean up alternative names string into an array
+            const altNamesArray = altNames.split(",").map(item => item.trim()).filter(Boolean);
 
-        //     // Clean up alternative names string into an array
-        //     const altNamesArray = altNames.split(",").map(item => item.trim()).filter(Boolean);
+            const productData = {
+                productId: productId,
+                name: name,
+                altNames: altNamesArray,
+                price: parseFloat(price) || 0, // Keeps numbers clean for backend
+                labelPrice: parseFloat(labelPrice) || 0,
+                description: description,
+                images: urls,
+                brand: brand,
+                model: model,
+                category: category,
+                isAvailable: isAvailable,
+                stock: parseInt(stock, 10) || 0 // Ensures integer conversion
+            };
 
-        //     const productData = {
-        //         productId: productId,
-        //         name: name,
-        //         altNames: altNamesArray,
-        //         price: parseFloat(price) || 0, // Keeps numbers clean for backend
-        //         labelPrice: parseFloat(labelPrice) || 0,
-        //         description: description,
-        //         images: urls,
-        //         brand: brand,
-        //         model: model,
-        //         category: category,
-        //         isAvailable: isAvailable,
-        //         stock: parseInt(stock, 10) || 0 // Ensures integer conversion
-        //     };
+            if (urls.length == 0){
+                productData.images = location.state.images;
+            }
 
-        //     await axios.post(
-        //         import.meta.env.VITE_API_URL + "/products", 
-        //         productData,
-        //         {
-        //             headers: {
-        //                 "Authorization": "Bearer " + token
-        //             }
-        //         }
-        //     );
+            await axios.put(
+                import.meta.env.VITE_API_URL + "/products/"+productId, 
+                productData,
+                {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            );
 
-        //     toast.success("Product added successfully");
-        //     navigate("/admin/products");
+            // toast.success("Product updated successfully");
+            // setIsUpdating(false)
+            // navigate("/admin/products");
+            //window.location.href = "/admin/products"
+            setIsUpdating(false);
+navigate("/admin/products", { state: { refresh: true, successMessage: "Product updated successfully" } });
 
-        // } catch (error) {
-        //     console.error("Error saving product:", error);
-        //     toast.error(error?.response?.data?.message || "Failed to add product");
-        // }
+        } catch (error) {
+            setIsUpdating(false)
+            console.error("Error updating product:", error);
+            toast.error(error?.response?.data?.message || "Failed to update product");
+        }
     }
 
     return (
@@ -95,8 +112,8 @@ export default function AdminEditProductPage() {
             <div className="sticky top-0 w-full h-[100px] rounded-lg bg-red-300 text-white flex items-center justify-between p-5 z-10">
                 <h1 className="text-2xl font-semibold">Edit new product</h1>
                 <div className="h-full flex justify-center items-center gap-2">
-                    <button onClick={handleSave} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                        Save
+                    <button onClick={handleUpdate} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors" disabled={isUpdating}>
+                        {isUpdating?"Updating...":"Update"}
                     </button>
                     <button onClick={() => navigate("/admin/products")} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                         Cancel
@@ -110,6 +127,7 @@ export default function AdminEditProductPage() {
                     <input 
                         className="border border-gray-300 rounded-lg p-2 w-full"
                         value={productId}
+                        disabled={true}
                         onChange={(e) => setProductId(e.target.value)}
                     />
                 </div>

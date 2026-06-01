@@ -156,14 +156,7 @@ export default function AdminProductPage() {
                     />
                     {/* FIX 4: added onClick handler to navigate to edit page */}
                     <Link to="/admin/edit-products" state={item}>
-                    <BiEdit
-                      className="text-2xl text-blue-500 hover:text-blue-300 cursor-pointer"
-                      onClick={() =>
-                        navigate(`/admin/edit-products/${item.productId}`,{
-                          state: item
-                        })
-                      }
-                    />
+                    <BiEdit className="text-2xl text-blue-500 hover:text-blue-300 cursor-pointer"/>
                     </Link>
                   </td>
                 </tr>
