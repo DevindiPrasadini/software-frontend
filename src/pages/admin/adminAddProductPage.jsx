@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import uploadMedia from "../../utils/mediaUpload"; //  Fixed!
+
 export default function AdminAddProductPage() {
     const [productId, setProductId] = useState("");
     const [name, setName] = useState("");
@@ -16,11 +17,13 @@ export default function AdminAddProductPage() {
     const [category, setCategory] = useState("lap"); // Initialized with first option
     const [isAvailable, setIsAvailable] = useState(true);
     const [stock, setStock] = useState(0);
-    
+    const [isSaving , setIsSeving] = useState(false)
     const navigate = useNavigate();
+    const location = useLocation()
     
     async function handleSave() {
         try {
+            setIsSeving(true)
             const token = localStorage.getItem("token");
             if (token == null) {
                 toast.error("You must be logged in to perform this action");
@@ -67,6 +70,7 @@ export default function AdminAddProductPage() {
             navigate("/admin/products");
 
         } catch (error) {
+            setIsSeving(false)
             console.error("Error saving product:", error);
             toast.error(error?.response?.data?.message || "Failed to add product");
         }
@@ -77,8 +81,8 @@ export default function AdminAddProductPage() {
             <div className="sticky top-0 w-full h-[100px] rounded-lg bg-red-300 text-white flex items-center justify-between p-5 z-10">
                 <h1 className="text-2xl font-semibold">Add new product</h1>
                 <div className="h-full flex justify-center items-center gap-2">
-                    <button onClick={handleSave} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                        Save
+                    <button onClick={handleSave} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                        disabled={isSaving}>{isSaving? "Saving..." : "Save"}
                     </button>
                     <button onClick={() => navigate("/admin/products")} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                         Cancel

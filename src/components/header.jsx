@@ -1,6 +1,16 @@
+import { Link } from "react-router-dom";
+
 export default function Header(){
     return(
-        <header className="w-full h-[100px] bg-accent">
+        <header className="w-full h-[100px] bg-accent relative flex items-center justify-center flex-shrink-0">
+            <Link to="/" className="w-[200px] h-full absolute left-10 flex justify-center items-center">
+                <img src="/logo.png" alt="Logo" className="h-[60px] mr-2"/>
+            </Link>
+            <div className="h-full  bg-red-500 flex justify-center items-centers gap-10">
+                <Link to="/" className="text-white text-lg font-semibold">Home</Link>
+                <Link to="/products" className="text-white text-lg font-semibold">Products</Link>
+                <Link to="/Contact-us" className="text-white text-lg font-semibold">Contact Us</Link>
+            </div>
 
         </header>
     )

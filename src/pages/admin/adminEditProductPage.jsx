@@ -2,12 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import uploadMedia from "../../utils/mediaUpload"; //  Fixed!
+import uploadMedia from "../../utils/mediaUpload";
 import { Navigate } from "react-router-dom";
 
-
 export default function AdminEditProductPage() {
-    const location = useLocation(); 
+    const location = useLocation();
 
     const [productId, setProductId] = useState(location.state?.productId || "");
     const [name, setName] = useState(location.state?.name || "");
@@ -16,106 +15,115 @@ export default function AdminEditProductPage() {
     const [labelPrice, setLabelPrice] = useState(location.state?.labelPrice || "");
     const [description, setDescription] = useState(location.state?.description || "");
     const [images, setImages] = useState([]);
-    const [brand, setBrand] = useState(location.state?.brand || ""); // Initialized with first option
+    const [brand, setBrand] = useState(location.state?.brand || "");
     const [model, setModel] = useState(location.state?.model || "");
-    const [category, setCategory] = useState(location.state?.category || ""); // Initialized with first option
-    const [isAvailable, setIsAvailable] = useState(location.state?.isAvailable || "");
+    const [category, setCategory] = useState(location.state?.category || "");
+    const [isAvailable, setIsAvailable] = useState(location.state?.isAvailable ?? true);
     const [stock, setStock] = useState(location.state?.stock || 0);
-    const [isUpdating , setIsUpdating] = useState(false)
-    
+    const [isUpdating, setIsUpdating] = useState(false);
+
     const navigate = useNavigate();
 
-    console.log("location state: ",location.state);
+    useEffect(() => {
+        if (location.state == null) {
+            toast.error("No product data found. Please select a product to edit.");
+            navigate("/admin/products");
+        }
+    }, []);
 
-    useEffect(
-        ()=>{
-            if(location.state == null){
-                toast.error("No product data found. Please select a product to edit.")
-                navigate("/admin/products");
-            }
-        },[]
-    )
-    if (location.state == null){
-        return <Navigate to="/admin/products" />
+    if (location.state == null) {
+        return <Navigate to="/admin/products" />;
     }
+
     async function handleUpdate() {
+        setIsUpdating(true);
         try {
-            setIsUpdating(true)
             const token = localStorage.getItem("token");
-            //console.log("token: ",token)
-            if (token == null) {
+            if (!token) {
                 toast.error("You must be logged in to perform this action");
-                window.location.href = "/login";
-               
+                navigate("/login");
                 return;
             }
 
-            // Upload images concurrently
-            // const mediaUploadPromises = [];
-            // for (let i = 0; i < images.length; i++) {
-            //     mediaUploadPromises.push(uploadMedia(images[i]));
-            // }
-            // const urls = await Promise.all(mediaUploadPromises);
-            const imageArray = Array.from(images); 
-        console.log("imageArray:", imageArray); // 👈 add this
-        
-        const urls = await Promise.all(imageArray.map(img => uploadMedia(img)));
-        console.log("urls:", urls)
-            // Clean up alternative names string into an array
-            const altNamesArray = altNames.split(",").map(item => item.trim()).filter(Boolean);
+            // ✅ Only upload if new images are selected, skip entirely otherwise
+            let urls = [];
+            const imageArray = Array.from(images);
 
-            const productData = {
-                productId: productId,
-                name: name,
-                altNames: altNamesArray,
-                price: parseFloat(price) || 0, // Keeps numbers clean for backend
-                labelPrice: parseFloat(labelPrice) || 0,
-                description: description,
-                images: urls,
-                brand: brand,
-                model: model,
-                category: category,
-                isAvailable: isAvailable,
-                stock: parseInt(stock, 10) || 0 // Ensures integer conversion
-            };
-
-            if (urls.length == 0){
-                productData.images = location.state.images;
+            if (imageArray.length > 0) {
+                console.log("Uploading images...", imageArray);
+                try {
+                    urls = await Promise.all(imageArray.map(img => uploadMedia(img)));
+                    console.log("Upload complete, urls:", urls);
+                } catch (uploadError) {
+                    // ✅ Catch upload failure separately so it doesn't silently hang
+                    console.error("Image upload failed:", uploadError);
+                    toast.error("Image upload failed. Please try again.");
+                    return; // Stop here, don't proceed with update
+                }
             }
 
+            const altNamesArray = altNames
+                .split(",")
+                .map(item => item.trim())
+                .filter(Boolean);
+
+            const productData = {
+                productId,
+                name,
+                altNames: altNamesArray,
+                price: parseFloat(price) || 0,
+                labelPrice: parseFloat(labelPrice) || 0,
+                description,
+                images: urls.length > 0 ? urls : location.state.images,
+                brand,
+                model,
+                category,
+                isAvailable,
+                stock: parseInt(stock, 10) || 0,
+            };
+
+            console.log("Sending product data:", productData);
+
             await axios.put(
-                import.meta.env.VITE_API_URL + "/products/"+productId, 
+                `${import.meta.env.VITE_API_URL}/products/${productId}`,
                 productData,
                 {
                     headers: {
-                        "Authorization": "Bearer " + token
-                    }
+                        Authorization: "Bearer " + token,
+                    },
                 }
             );
 
-            // toast.success("Product updated successfully");
-            // setIsUpdating(false)
-            // navigate("/admin/products");
-            //window.location.href = "/admin/products"
-            setIsUpdating(false);
-navigate("/admin/products", { state: { refresh: true, successMessage: "Product updated successfully" } });
+            console.log("Update successful, navigating...");
+            toast.success("Product updated successfully");
+
+            navigate("/admin/products", { replace: true });
 
         } catch (error) {
-            setIsUpdating(false)
             console.error("Error updating product:", error);
             toast.error(error?.response?.data?.message || "Failed to update product");
+        } finally {
+            setIsUpdating(false);
         }
     }
 
     return (
         <div className="w-full h-full flex flex-col items-center p-4 overflow-y-auto">
             <div className="sticky top-0 w-full h-[100px] rounded-lg bg-red-300 text-white flex items-center justify-between p-5 z-10">
-                <h1 className="text-2xl font-semibold">Edit new product</h1>
+                <h1 className="text-2xl font-semibold">Edit Product</h1>
                 <div className="h-full flex justify-center items-center gap-2">
-                    <button onClick={handleUpdate} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors" disabled={isUpdating}>
-                        {isUpdating?"Updating...":"Update"}
+                    <button
+                        onClick={handleUpdate}
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={isUpdating}
+                    >
+                        {isUpdating ? "Updating..." : "Update"}
                     </button>
-                    <button onClick={() => navigate("/admin/products")} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button
+                        onClick={() => navigate("/admin/products")}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                        disabled={isUpdating}
+                    >
                         Cancel
                     </button>
                 </div>
@@ -124,16 +132,15 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
             <div className="w-full flex flex-wrap bg-white mt-8 p-5 shadow-2xl rounded-lg">
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Product Id</label>
-                    <input 
-                        className="border border-gray-300 rounded-lg p-2 w-full"
+                    <input
+                        className="border border-gray-300 rounded-lg p-2 w-full bg-gray-100"
                         value={productId}
                         disabled={true}
-                        onChange={(e) => setProductId(e.target.value)}
                     />
                 </div>
                 <div className="w-3/4 p-2">
                     <label className="block mb-2 font-semibold">Name</label>
-                    <input 
+                    <input
                         className="border border-gray-300 rounded-lg p-2 w-full"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -141,7 +148,7 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-full p-2">
                     <label className="block mb-2 font-semibold">Alternative names (Comma separated)</label>
-                    <input 
+                    <input
                         className="border border-gray-300 rounded-lg p-2 w-full"
                         placeholder="e.g. iphone 14, apple phone"
                         value={altNames}
@@ -150,7 +157,7 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Price</label>
-                    <input 
+                    <input
                         type="number"
                         className="border border-gray-300 rounded-lg p-2 w-full"
                         value={price}
@@ -159,7 +166,7 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Label price</label>
-                    <input 
+                    <input
                         type="number"
                         className="border border-gray-300 rounded-lg p-2 w-full"
                         value={labelPrice}
@@ -179,16 +186,16 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Images</label>
-                    <input 
-                        type="file" 
-                        multiple 
+                    <input
+                        type="file"
+                        multiple
                         className="w-full p-1 border border-gray-300 rounded-lg"
                         onChange={(e) => setImages(e.target.files)}
                     />
                 </div>
-                <div className="w-full p-2"> {/* Expanded width for description readability */}
+                <div className="w-full p-2">
                     <label className="block mb-2 font-semibold">Description</label>
-                    <textarea 
+                    <textarea
                         className="border border-gray-300 rounded-md p-2 w-full h-24"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -196,7 +203,7 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Brand</label>
-                    <select 
+                    <select
                         value={brand}
                         onChange={(e) => setBrand(e.target.value)}
                         className="border border-gray-300 rounded-md p-2 w-full"
@@ -207,7 +214,7 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Model</label>
-                    <input 
+                    <input
                         className="border border-gray-300 rounded-md p-2 w-full"
                         value={model}
                         onChange={(e) => setModel(e.target.value)}
@@ -215,7 +222,7 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Stock</label>
-                    <input 
+                    <input
                         type="number"
                         className="border border-gray-300 rounded-md p-2 w-full"
                         value={stock}
@@ -224,9 +231,9 @@ navigate("/admin/products", { state: { refresh: true, successMessage: "Product u
                 </div>
                 <div className="w-1/4 p-2">
                     <label className="block mb-2 font-semibold">Availability</label>
-                    <select 
+                    <select
                         value={isAvailable.toString()}
-                        onChange={(e) => setIsAvailable(e.target.value === "true")} 
+                        onChange={(e) => setIsAvailable(e.target.value === "true")}
                         className="border border-gray-300 rounded-md p-2 w-full"
                     >
                         <option value="true">Available</option>

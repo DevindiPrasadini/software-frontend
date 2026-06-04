@@ -1,34 +1,22 @@
-export default function ProductCard({ name, image, price }) {
-  console.log(name);
-  console.log("product card is being rendered");
+import { Link } from "react-router-dom";  // ✅ add this
 
+export default function ProductCard(props) {
+
+  const product = props.product;
   return (
-    <div className="w-64 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
-      
-      {/* Image */}
-      <div className="h-40 bg-gray-100 flex items-center justify-center">
-        <img
-          src={image}
-          alt={`Picture of ${name}`}
-          className="h-full object-contain p-4"
-        />
+    <Link to={"/overview/"+product.productId} state={product} className="w-[300px] h-[450px] m-10 bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col hover:[&_.primary-image]:opacity-0 justify-between cursor-pointer">
+      <div className="w-[300px] h-[300px] bg-red-300 relative">
+        <img src={product.images[1]} alt={product.productName} className="w-[300px] h-[300px] object-cover bg-white absolute top-0 left-0" />
+        <img src={product.images[0]} alt={product.productName} className="w-[300px] h-[300px] object-cover bg-white absolute top-0 left-0 primary-image transition-opacity duration-500" />
+      </div>
+      <h1 className="text-lg font-semibold mt-2 px-2">{product.name}</h1>
+      <div className="w-full flex flex-col py-4">
+        {
+          product.labelledPrice  > product.price && <span className="tetx-sm text-gray-500 mt-2 px-4 line-through">{product.labelledPrice}</span>
+        }
+        <span className="text-lg font-bold mt-1 px-4">{product.price}</span>
       </div>
 
-      {/* Content */}
-      <div className="p-4">
-        <h1 className="text-lg font-semibold text- truncate">
-          {name}
-        </h1>
-
-        <p className="text-xl font-bold text-green-600 mt-2">
-          LKR {price}
-        </p>
-
-        {/* Button */}
-        <button className="mt-4 w-full bg-blue-500 text-white py-2 rounded-xl font-medium hover:bg-blue-600 active:scale-95 transition">
-          Buy Now
-        </button>
-      </div>
-    </div>
-  );
+    </Link>
+  )
 }
