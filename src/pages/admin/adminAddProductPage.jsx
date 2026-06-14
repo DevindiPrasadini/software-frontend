@@ -143,6 +143,9 @@ export default function AdminAddProductPage() {
                     >
                         <option value="lap">lap</option>
                         <option value="phone">phone</option>
+                        <option value="Headphone">HeadPhone</option>
+                        <option value="Mouse">Mouse</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div className="w-1/4 p-2">
@@ -171,6 +174,9 @@ export default function AdminAddProductPage() {
                     >
                         <option value="Apple">Apple</option>
                         <option value="Samsung">Samsung</option>
+                        <option value="hp">Hp</option>
+                        <option value="Sony">Sony</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
                 <div className="w-1/4 p-2">
