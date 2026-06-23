@@ -22,6 +22,7 @@ export default function AdminProductsPage() {
                     }
                 }).then(
                     (response) => {
+                      console.log(response.data)
                         setProducts(response.data);
                         setIsProductsAreLoaded(true);
                     }

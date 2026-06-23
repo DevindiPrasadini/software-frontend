@@ -9,7 +9,7 @@ export default function AdminAddProductPage() {
     const [name, setName] = useState("");
     const [altNames, setAltNames] = useState("");
     const [price, setPrice] = useState("");
-    const [labelPrice, setLabelPrice] = useState("");
+    const [labelledPrice, setLabelledPrice] = useState("");
     const [description, setDescription] = useState("");
     const [images, setImages] = useState([]);
     const [brand, setBrand] = useState("Apple"); // Initialized with first option
@@ -46,7 +46,7 @@ export default function AdminAddProductPage() {
                 name: name,
                 altNames: altNamesArray,
                 price: parseFloat(price) || 0, // Keeps numbers clean for backend
-                labelPrice: parseFloat(labelPrice) || 0,
+                labelledPrice: parseFloat(labelledPrice) || 0,
                 description: description,
                 images: urls,
                 brand: brand,
@@ -130,8 +130,8 @@ export default function AdminAddProductPage() {
                     <input 
                         type="number"
                         className="border border-gray-300 rounded-lg p-2 w-full"
-                        value={labelPrice}
-                        onChange={(e) => setLabelPrice(e.target.value)}
+                        value={labelledPrice}
+                        onChange={(e) => setLabelledPrice(e.target.value)}
                     />
                 </div>
                 <div className="w-1/4 p-2">

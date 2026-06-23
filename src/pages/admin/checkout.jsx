@@ -1,10 +1,12 @@
 import { useState } from "react"
 import getCart, { addToCart , getCartTotal} from "../../utils/cart"
 import getFormattedPrice from "../../utils/price-format"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
+import CreateOrderModal from "../../components/createOrderModal"
 
-export default function CartPage() {
-    const [cart, setCart] = useState(getCart())
+export default function CheckoutPage() {
+    const location = useLocation()
+    const [cart, setCart] = useState(location.state)
 
     return (
         <div className="min-h-screen bg-gray-50 py-10 px-4">
@@ -119,22 +121,21 @@ export default function CartPage() {
            <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-[0_-4px_20px_rgba(0,0,0,0.08)] z-50">
     <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        <div>
-            <p className="text-sm text-gray-500">
-                Total Amount
-            </p>
-            <p className="text-2xl font-bold text-accent">
+        <div className="w-[500px] bg-white border rounded-t-lg shadow-2xl flex p-2 items-center justify-between fix-botton">
+            <CreateOrderModal cart={cart}/>
+           
+           <p className="text-2xl font-bold text-accent">
                 {getFormattedPrice(getCartTotal(cart))}
             </p>
         </div>
 
-        <Link
+        {/* <Link
             to="/checkout"
             state={cart}
             className="bg-accent text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition"
         >
-            Checkout
-        </Link>
+            Order Now
+        </Link> */}
 
     </div>
 </div>

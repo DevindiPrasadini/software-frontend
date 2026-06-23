@@ -71,7 +71,7 @@ export default function ProductOverviewPage() {
                             </p>
                             {
                                 product.labelledPrice > product.price &&
-                                <span className="text-xl text-sm text-gray-500 line-through ">
+                                <span className="text-xl  text-gray-500 line-through ">
                                     {
                                         getFormattedPrice(product.labelledPrice)
                                     }
@@ -97,11 +97,23 @@ export default function ProductOverviewPage() {
                                     addToCart(product , 1)
                                 }
                             }>Add to cart</button>
-                            <button onClick={
-                                ()=>{
-                                    console.log(getCart())
+                            <Link to="/checkout" state={
+                                [
+                                    {
+                                        product : {
+                                        productId : product.productId,
+                                        name : product.name,
+                                        image : product.images[0],
+                                        labelledPrice : product.labelledPrice,
+                                        price :product.price,
+                                    },
+                                    quantity : 1
                                 }
-                            }className="w-62.5 h-16 bg-blue-500 text-white font-semibold rounded-lg cursor-pointer  hover:bg-blue-700 transition-colors-300">Buy now</button>
+                                ]
+                            }
+                             
+                            
+                            className="w-62.5 h-16 bg-blue-500 text-white font-semibold rounded-lg cursor-pointer  hover:bg-blue-700 transition-colors-300 flex justify-center items-center">Buy now</Link>
 
                         </div>
                     </div>
