@@ -1,49 +1,25 @@
-import axios from "axios";
+
 import { useState } from "react";
-import toast from "react-hot-toast";
+
 import { FaEye, FaPhoneAlt, FaTimes, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
 import getFormattedPrice from "../utils/price-format";
-import api from "../utils/api";
+
 
 const STATUS_OPTIONS = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
 
-export default function OrderDetailsModal(props) {
+export default function CustomerOrderDetailsModal(props) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [notes , setNotes]=useState(props.order.notes)
-    const [status, setStatus] = useState(props.order?.status || "Pending");
-    const [isUpdating, setIsUpdating] = useState(false);
+    
 
     const order = props.order;
-    const refresh = props.refresh;
+   
 
     
 
     if (!order) return null;
 
-    async function updateOrder() {
-        setIsUpdating(true);
-        const token = localStorage.getItem("token")
-
-        try {
-            await api.put("/orders/" + order.orderId , {
-                notes : notes,
-                status : status
-            },{
-                headers: {
-    Authorization: `Bearer ${token}`
-}
-            })
-            toast.success("Order updated successfully")
-            refresh()
-            setIsUpdating(false)
-
-        }catch(error){
-            console.log(error)
-            toast.error("Failed to update order")
-            setIsUpdating(false)
-        }
-    }
+    
     return (
         <>
             <FaEye
@@ -138,27 +114,7 @@ export default function OrderDetailsModal(props) {
                             </span>
                         </div>
                          {/*notes */}
-                            <div className="w-full flex justify-center items-center bg-gray-100 rounded-lg p-4 m-2">
-                                <div className="w-1/2 flex flex-col">
-                                    <label className="text-gray-800 font-semibold mb-1">Edit Notes:</label>
-                                    <textarea type="text" value={notes} className="px-3 py-1 w-3/4 bg-gray-200 text-gray-700 rounded" onChange={(e)=> setNotes(e.target.value)}/>
-                                </div>
-                                <div className=" flex flex-col ">
-                                    <label className="text-gray-800 font-semibold mb-1">Update Status:</label>
-                                <select value={status} className="px-3 py-1 bg-gray-200 text-gray-700 rounded" onChange={(e)=>setStatus(e.target.value)}>
-                                    <option value="pending">Pending</option>
-                                    <option value="processing">processing</option>
-                                    <option value="shipped">Shipped</option>
-                                    <option value="delivered">Delivered</option>
-                                </select>
-                                </div>
-                                 <div className="flex justify-end py-2 px-2">
-                            <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700" onClick={updateOrder} disabled={isUpdating}>
-                                {isUpdating ? "Wait.." : "Update"}
-                            </button>
-                        </div>
-                            </div>
-                        
+                          
                         
 
                     </div>
