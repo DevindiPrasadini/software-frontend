@@ -45,12 +45,12 @@ export default function ProductOverviewPage() {
                 </div>
             }
             {
-                status == "success" && <div className="w-full h-full bg-white flex">
-                    <div className="w-1/2 h-full flex justify-center items-center">
+                status == "success" && <div className="w-full h-full bg-white flex lg:flex-row flex-col pb-24">
+                    <div className="lg:w-1/2 w-full h-full flex justify-center items-center">
                         <ImageSlideShow images={product.images} />
 
                     </div>
-                    <div className="w-1/2 h-full  flex flex-col p-[20px]">
+                    <div className="lg:w-1/2 h-fullw-full flex flex-col p-5">
                         <h1 className="text-3xl font-bold">{product.name}
                             {product.altNames.map(
                                 (alterantiveName, index) => {
@@ -78,23 +78,25 @@ export default function ProductOverviewPage() {
                                 </span>
                             }
                         </div>
+                        {/* brand and model */}
                         <div className="w-full mt-5 flex gap-10">
                                 <span className="text-lg text-gray-500"><span className="text-gray-800 font-semibold">{product.brand}</span></span>
                                 <span className="text-lg text-gray-500"><span className="text-gray-800 font-semibold">{product.model}</span></span>
                             </div>
-                           
+                           {/* category */}
                             <div className="w-full mt-5 flex gap-10">
                                 <span className="text-lg text-gray-500"><span className="text-gray-800 font-semibold">{product.category}</span></span>
                             </div>
-                        <p className="text-lg mt-5">
+                        <p className="text-lg mt-5 mb-[150px] lg:mb-0">
                             {
                                 product.description
                             }
                         </p>
-                        <div className="flex mt-5 gap-5">
+                        <div className="flex lg:static mt-5 gap-5 fixed bottom-[82px] w-full right-0 p-2 backdrop-blur-2xl lg:backdrop:blur-none">
                             <button className="w-62.5 h-16 bg-green-500 text-white font-semibold rounded-lg cursor-pointer hover:bg-green-700 transition-colors-300" onClick={
                                 ()=>{
                                     addToCart(product , 1)
+                                    toast.success("Product added to cart")
                                 }
                             }>Add to cart</button>
                             <Link to="/checkout" state={

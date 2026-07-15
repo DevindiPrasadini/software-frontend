@@ -6,6 +6,9 @@ import CartPage from "./admin/cart";
 import CheckoutPage from "./admin/checkout";
 import CustomerOrdersPage from "./customerMyOrdersPage";
 import SettingsPage from "./settings";
+import TestPage from "./test";
+import BottomNavigationBar from "../components/bottomNavigationBar";
+import NotFoundPage from "./notFoundPage";
 
 export default function Homepage(){
     return(
@@ -21,7 +24,10 @@ export default function Homepage(){
                 <Route path="/my-orders" element={<CustomerOrdersPage/>}/>
                 <Route path="/settings" element={<SettingsPage/>}/>
                 <Route path="/checkout" element={<CheckoutPage/>}/>
+                <Route path="/test" element={<TestPage/>}/>
+                <Route path="/*" element={<NotFoundPage/>}/>
             </Routes>
+            <BottomNavigationBar/>
            </div>
 
         </div>

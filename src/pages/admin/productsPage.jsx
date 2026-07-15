@@ -17,10 +17,11 @@ export default function ProductsPage() {
   }, []); // ✅ run once on mount
 
   return (
-    <div className="w-full h-full flex flex-wrap justify-center items-start"> {/* ✅ flex-wrap added */}
+    <div className="w-full h-full flex flex-wrap justify-center items-start lg:pb-0 "> 
       {products.map((item) => (
         <ProductCard key={item.productId} product={item}/>
       ))}
+      <div className="w-full h-[100px]"></div>
     </div>
   );
 }
