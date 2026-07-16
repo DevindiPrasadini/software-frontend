@@ -2,12 +2,39 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios";
 import toast from "react-hot-toast";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { FcGoogle } from "react-icons/fc";
+import api from "../utils/api";
 
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate()
+
+    const googleLogin = useGoogleLogin(
+        {//what if google login success or failed
+            onSuccess: (response)=>{
+                api.post("/users/google-login",{
+                    token : response.access_token
+                }).then((response)=>{
+                    localStorage.setItem("token" , response.data.token)
+                    toast.success("Login successfully!")
+                    if(response.data.isAdmin){
+                        navigate("/admin")
+                    }else{
+                        navigate("/")
+                    }
+                }).catch(()=>{
+                    toast.error("Google login failed")
+                })
+            },
+            onError: (error)=>{
+                toast.log("Google login failed")
+            }
+        }
+    )
+    
 
     function handleLogin(){//print email and password
         console.log("email: ",email);
@@ -74,8 +101,12 @@ export default function LoginPage() {
 
                     </input>
                     <p className="mb-6 w-3/4 text-right">Forget Password? <Link to="/forgot-password" className="text-accent">Click here</Link></p>
-                    <button onClick={handleLogin} className="w-3/4 p-3 bg-accent text-white rounded-lg">
+                    <button onClick={handleLogin} className="w-3/4 p-3 mb-6 bg-accent text-white rounded-lg">
                         Sign In
+                    </button>
+                     <button onClick={googleLogin} className="w-3/4 flex justify-center items-center gap-2 p-3 mt-1 bg-white text-pink-400 rounded-lg">
+                        <FcGoogle />
+                        Sign in with Google
                     </button>
                     <p className="mt-6 w-3/4 text-center text-white">Don't have an account?<Link to="/register" className="text-accent">Register</Link></p>
 

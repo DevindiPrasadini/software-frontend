@@ -30,7 +30,7 @@ export default function UserData() {
 		<>
 			{user ? (
 				<div className="flex w-10 h-10 lg:h-full aspect-square lg:w-[150px]  relative rounded-lg ">
-                    <img src={user.image} referrerPolicy="no-referrer" className="w-full lg:w-auto aspect-square absolute lg:static rounded-lg"/>
+                    <img src={user.image}referrerPolicy="no-referrer" referrerPolicy="no-referrer" className="w-full lg:w-auto aspect-square absolute lg:static rounded-lg"/>
                     <select className=" absolute lg:static text-transparent lg:text-white text-center w-full h-full"
                         onChange={(e)=>{
                             if(e.target.value === "option2"){

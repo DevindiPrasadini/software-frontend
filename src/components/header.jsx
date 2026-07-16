@@ -9,9 +9,9 @@ export default function Header(){
                 <img src="/logo.png" alt="Logo" className="h-[60px] mr-2"/>
             </Link>
             <div className="h-full hidden lg:flex justify-center items-centers gap-10">
-                <Link to="/" className="text-white text-lg font-semibold">Home</Link>
-                <Link to="/products" className="text-white text-lg font-semibold">Products</Link>
-                <Link to="/Contact-us" className="text-white text-lg font-semibold">Contact Us</Link>
+                <Link to="/" className="text-white mt-7 text-lg font-semibold">Home</Link>
+                <Link to="/products" className="text-white mt-7 text-lg font-semibold">Products</Link>
+                <Link to="/Contact-us" className="text-white mt-7 text-lg font-semibold">Contact Us</Link>
             </div>
             <div className=" h-[50px] hidden absolute right-30 lg:flex justify-center items-center">
                 <UserData/>
