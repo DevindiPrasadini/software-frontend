@@ -34,7 +34,7 @@ export default function ProductsPage() {
 
   return (
     <div className="w-full h-full flex flex-wrap relative justify-center items-start lg:pb-0 pt-16">
-      <div className="full absolute top-0 left-0 w-full h-[100px] flex justify-center items-center">
+      <div className="full px-3 absolute top-0 left-0 w-full h-[100px] flex justify-center items-center">
         <input value={query} onChange={(e) => setQuery(e.target.value)} type="text" placeholder="Search products..." className="w-1/2 p-3 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-accent"></input>
         <button className="ml-4 px-4 py-3 bg-accent text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-dark" onClick={handleSearch}>Search</button>
         {/*button for all products */}
