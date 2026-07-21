@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import LoadingAnimation from "../../components/loadingAnimation";
 import StarRating from "../../components/starRating";
 
-export default function AdminReviewsPage() {
+export default function AdminReviewPage() {
     const [reviews, setReviews] = useState([]);
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
