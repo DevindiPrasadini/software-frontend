@@ -1,7 +1,7 @@
 import { useState } from "react"
 import api from "../utils/api"
 import toast from "react-hot-toast"
-import StarRating from "./StarRating"
+import StarRating from "./starRating"
 
 export default function ReviewForm({ productId, onReviewAdded }) {
     const [rating, setRating] = useState(0)

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import StarRating from "./StarRating";
+import StarRating from "./starRating";
 import getFormattedPrice from "../utils/price-format";
 
 const LOW_STOCK_THRESHOLD = 5;
