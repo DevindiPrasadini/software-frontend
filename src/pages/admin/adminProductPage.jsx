@@ -7,7 +7,7 @@ import LoadingAnimation from "../../components/loadingAnimation";
 import ProductDeleteModal from "../../components/productDeleteModal";
 
 
-export default function AdminProductsPage() {
+export default function AdminProductPage() {
     const [products, setProducts] = useState([]);
     const [isProductsAreLoaded, setIsProductsAreLoaded] = useState(false);
 
