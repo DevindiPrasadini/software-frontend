@@ -7,7 +7,7 @@ import ImageSlideShow from "../../components/imageSlideShow"
 import { Link } from "react-router-dom"
 import getFormattedPrice from "../../utils/price-format"
 import getCart, { addToCart } from "../../utils/cart"
-import ReviewForm from "../../components/ReviewForm"
+import ReviewForm from "../../components/reviewForm"
 import ReviewList from "../../components/ReviewList"
 
 const LOW_STOCK_THRESHOLD = 5;

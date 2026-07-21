@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import LoadingAnimation from "../../components/loadingAnimation";
-import StarRating from "../../components/StarRating";
+import StarRating from "../../components/starRating";
 
 export default function AdminReviewsPage() {
     const [reviews, setReviews] = useState([]);
