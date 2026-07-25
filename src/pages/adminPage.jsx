@@ -13,7 +13,7 @@ import AdminAddProductPage from "./admin/adminAddProductPage";
 import AdminEditProductPage from "./admin/adminEditProductPage";
 import AdminOrdersPage from "./admin/adminOrdersPage";
 import AdminUsersPage from "./admin/adminUsersPage";
-import AdminReviewsPage from "./admin/adminReviewPage";
+import AdminReviewPage from "./admin/adminReviewPage";
 
 const NAV_ITEMS = [
     { to: "/admin/", label: "Orders", icon: FaShoppingCart, exact: true },

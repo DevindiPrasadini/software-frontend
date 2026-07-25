@@ -1,7 +1,7 @@
 import { useState } from "react"
 import toast from "react-hot-toast"
 import api from "../utils/api"
-import StarRating from "./StarRating"
+import StarRating from "./starRating"
 
 export default function ReviewList({ reviews, loading, isAdmin = false, onReviewDeleted, onReviewUpdated }) {
     const [editingId, setEditingId] = useState(null)

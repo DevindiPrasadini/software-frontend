@@ -7,7 +7,7 @@ import ImageSlideShow from "../../components/imageSlideShow"
 import { Link } from "react-router-dom"
 import getFormattedPrice from "../../utils/price-format"
 import getCart, { addToCart } from "../../utils/cart"
-import ReviewForm from "../../components/ReviewForm"
+import ReviewForm from "../../components/reviewForm"
 import ReviewList from "../../components/ReviewList"
 
 const LOW_STOCK_THRESHOLD = 5;
@@ -76,7 +76,7 @@ export default function ProductOverviewPage() {
     }
 
     return (
-        <div className="w-full min-h-full flex flex-col items-center">
+        <div className="w-ful min-h-full flex flex-col items-center">
             {
                 status == "loading" && (
                     <div className="w-full h-full flex justify-center items-center">
