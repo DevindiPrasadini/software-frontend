@@ -76,7 +76,7 @@ export default function ProductOverviewPage() {
     }
 
     return (
-        <div className="w-full min-h-full flex flex-col items-center">
+        <div className="w-ful min-h-full flex flex-col items-center">
             {
                 status == "loading" && (
                     <div className="w-full h-full flex justify-center items-center">

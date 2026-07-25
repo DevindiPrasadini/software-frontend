@@ -53,7 +53,7 @@ export default function ProductCard(props) {
         {
           product.labelledPrice > product.price && <span className="tetx-sm text-gray-500 mt-2 px-4 line-through">{getFormattedPrice(product.labelledPrice)}</span>
         }
-        <span className="text-lg font-bold mt-1 px-4">{product.price}</span>
+        <span className="text-lg font-bold mt-1 px-4">{getFormattedPrice(product.price)}</span>
       </div>
     </Link>
   )
